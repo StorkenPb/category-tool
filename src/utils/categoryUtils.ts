@@ -35,13 +35,13 @@ export const createCategoryNode = (
 export const createTextLine = (
   text: string,
   level: number = 0,
-  nodeId?: string
+  parentId: string | null = null
 ): TextLine => {
   return {
     id: generateLineId(),
     text,
     level,
-    nodeId,
+    parentId,
   };
 };
 
@@ -188,7 +188,7 @@ export const treeToTextLines = (tree: CategoryTree): TextLine[] => {
     const node = tree.nodes[nodeId];
     if (!node) return;
 
-    lines.push(createTextLine(node.name, node.level, node.id));
+    lines.push(createTextLine(node.name, node.level, node.parentId));
     
     // Add children
     node.children.forEach(childId => {
@@ -202,4 +202,31 @@ export const treeToTextLines = (tree: CategoryTree): TextLine[] => {
   });
 
   return lines;
-}; 
+};
+
+// Calculate parent relationships for text lines based on level hierarchy
+export const calculateParentRelationships = (lines: TextLine[]): TextLine[] => {
+  const updatedLines = [...lines];
+  const levelStack: { lineId: string; level: number }[] = [];
+
+  updatedLines.forEach((line, index) => {
+    // Find the appropriate parent based on level
+    while (levelStack.length > 0 && levelStack[levelStack.length - 1].level >= line.level) {
+      levelStack.pop();
+    }
+
+    // Set parent ID (null for root level)
+    const parentId = levelStack.length > 0 ? levelStack[levelStack.length - 1].lineId : null;
+    updatedLines[index] = {
+      ...line,
+      parentId,
+    };
+
+    // Add current line to stack for potential children
+    levelStack.push({ lineId: line.id, level: line.level });
+  });
+
+  return updatedLines;
+};
+
+ 

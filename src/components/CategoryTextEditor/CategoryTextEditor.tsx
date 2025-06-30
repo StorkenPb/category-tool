@@ -2,7 +2,7 @@
 
 import React, { useState, useRef, useCallback, useEffect } from 'react';
 import { TextLine, CategoryEditorState } from '@/types/category';
-import { createTextLine } from '@/utils/categoryUtils';
+import { createTextLine, calculateParentRelationships } from '@/utils/categoryUtils';
 import TextLineComponent from './TextLine';
 
 interface CategoryTextEditorProps {
@@ -17,7 +17,7 @@ const CategoryTextEditor: React.FC<CategoryTextEditorProps> = ({
   className = '',
 }) => {
   const [state, setState] = useState<CategoryEditorState>({
-    lines: initialLines.length > 0 ? initialLines : [createTextLine('', 0)],
+    lines: initialLines.length > 0 ? initialLines : [createTextLine('', 0, null)],
     activeLineIndex: 0,
     isEditing: false,
   });
@@ -58,13 +58,16 @@ const CategoryTextEditor: React.FC<CategoryTextEditorProps> = ({
     const currentLine = state.lines[state.activeLineIndex];
     if (!currentLine) return;
 
-    const newLine = createTextLine('', currentLine.level);
+    const newLine = createTextLine('', currentLine.level, null);
     const newLines = [...state.lines];
     newLines.splice(state.activeLineIndex + 1, 0, newLine);
 
+    // Recalculate parent relationships
+    const updatedLines = calculateParentRelationships(newLines);
+
     setState(prev => ({
       ...prev,
-      lines: newLines,
+      lines: updatedLines,
       activeLineIndex: state.activeLineIndex + 1,
     }));
   }, [state.lines, state.activeLineIndex]);
@@ -77,12 +80,15 @@ const CategoryTextEditor: React.FC<CategoryTextEditorProps> = ({
     const newLines = [...state.lines];
     newLines.splice(state.activeLineIndex, 1);
 
+    // Recalculate parent relationships
+    const updatedLines = calculateParentRelationships(newLines);
+
     // Adjust active line index
-    const newActiveIndex = Math.min(state.activeLineIndex, newLines.length - 1);
+    const newActiveIndex = Math.min(state.activeLineIndex, updatedLines.length - 1);
 
     setState(prev => ({
       ...prev,
-      lines: newLines,
+      lines: updatedLines,
       activeLineIndex: newActiveIndex,
     }));
   }, [state.lines, state.activeLineIndex]);
@@ -120,9 +126,12 @@ const CategoryTextEditor: React.FC<CategoryTextEditorProps> = ({
       level: newLevel,
     };
 
+    // Recalculate parent relationships
+    const updatedLines = calculateParentRelationships(newLines);
+
     setState(prev => ({
       ...prev,
-      lines: newLines,
+      lines: updatedLines,
     }));
   }, [state.lines, state.activeLineIndex]);
 

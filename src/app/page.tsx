@@ -63,9 +63,14 @@ export default function Home() {
             </h2>
             <div className="grid grid-cols-1 lg:grid-cols-1 gap-4">
               <div>
-                <h3 className="text-sm font-medium text-gray-700 mb-2">Text Lines</h3>
+                <h3 className="text-sm font-medium text-gray-700 mb-2">Text Lines (with Parent Relationships)</h3>
                 <pre className="bg-gray-100 p-4 rounded text-sm text-gray-900 overflow-auto max-h-64">
-                  {JSON.stringify(lines, null, 2)}
+                  {JSON.stringify(lines.map(line => ({
+                    id: line.id,
+                    text: line.text || '(empty)',
+                    level: line.level,
+                    parentId: line.parentId || 'null (root)'
+                  })), null, 2)}
                 </pre>
               </div>
             </div>

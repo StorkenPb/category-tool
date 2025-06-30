@@ -25,7 +25,7 @@ export interface TextLine {
   id: string;
   text: string;
   level: number;
-  nodeId?: string; // Optional: linked to existing node
+  parentId: string | null; // Track parent ID (null for root level)
 }
 
 // Editor state

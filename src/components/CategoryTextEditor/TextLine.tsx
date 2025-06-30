@@ -106,7 +106,7 @@ const TextLineComponent: React.FC<TextLineProps> = ({
         onBlur={onBlur}
         onKeyDown={handleKeyDown}
         className="flex-1 bg-transparent border-none outline-none text-sm text-gray-900"
-        placeholder={line.level === 0 ? "Enter category name..." : "Enter subcategory name..."}
+        placeholder={line.level === 0 ? "Enter root-category name..." : "Enter sub-category name..."}
       />
 
       {/* Level indicator */}
