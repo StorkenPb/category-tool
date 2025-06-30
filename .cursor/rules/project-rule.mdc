@@ -1,0 +1,97 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# Project Overview
+
+This project - named Category Tool, the E-commerce tool to create, visaulize and export category structurs - is built using Next.js and TypeScript. It integrates various libraries for state management, UI components, and data fetching.
+
+# Key URLs
+
+- GitHub Repository: https://github.com/storkenpb/categorytool
+- React flow GitHub: https://github.com/xyflow/xyflow/tree/main/packages/react
+- React flow documentation: https://reactflow.dev/learn
+- React flow api reference: https://reactflow.dev/api-reference
+- React flow examples: https://reactflow.dev/examples
+
+# 💡 Tech Stack Summary
+
+| Part         | Choice                |
+|--------------|-----------------------|
+| Framework    | React / Next.js       |
+| UI           | Tailwind + shadcn/ui  |
+| State Mgmt   | Zustand               |
+| Tree Viz     | `react-flow`          |
+| Deployment   | Vercel                |
+
+
+# Project Structure
+
+- **Components**: Contains reusable UI components.
+- **App**: Next.js app for routing.
+- **Hooks**: Custom React hooks for state management.
+
+# Important Scripts
+
+- `dev`: Starts the development server.
+- `build`: Builds the application for production.
+
+# ✅ Project Goals
+
+- Create category hierarchies using a text base approace
+- Represent the category wit hadditional metadata such as language internally
+- Visualize category hierarchies using react-flow
+- Enable manupulation of the category nodes using the visual representation
+- Allow import/export of tree structures (csv)
+
+# 📁 Suggested Project Structure (Cursor-Friendly)
+
+## Feature List
+
+### 🚀 MVP
+
+- [x] Represent category hierarchy as an internal object
+- [x] Visualize category hierarchy as a tree
+- [x] Rename/edit category nodes
+- [x] Add new category nodes using visual components and keyboard
+- [x] Remove category nodes
+- [x] Select node to view/edit details (name, metadata)
+- [x] Export category tree to CSV (using json2csv)
+- [x] Import category tree from CSV
+
+### 🔮 Future features
+
+- [ ] Visualize category hierarchy as an editable text (list)
+- [ ] Add new category nodes using text/list interaction
+- [ ] Light/Dark mode
+- [ ] Drag-and-drop to reorder/move nodes
+
+### 🙅 Wont do
+- [ ] Mobile friendly version
+
+## User stories
+- As a user I want to see the nodes of an hard coded category as visual nodes on a web page
+- As a user I want to edit any nodes name by pressing the node and enter text
+- As a user I want to add a sibling to an existing node by selecting it and pressing TAB
+- As a user I want to add a child to an existing node by selecting it and pressing ENTER
+- As a user I want to add a sibling to an existing node by selecting it and clicking an icon
+- As a user I want to add a child to an existing node by selecting it and clicking an icon
+- As a user I want to remove a node by selecint it and pressing DEL
+
+
+# Data modeling
+
+The internal representation should be used to update the structure and used to render the visual parts as well as a text representation of the tree.
+When updating a node, it is important that the smallest part possible is updated to not re-write the whole strucure
+The model needs to be determined during the project and thought throu to both fit the needs for an export, but also to be able to represent the react-flow nodes.
+
+
+## CSV Export
+
+Example format, however the system should handle a list of languages
+
+code;label-en_US;label-sv_SE;parent
+electronics;Electronics;Elektronik;
+
+phones;Phones;Telefoner;electronics
