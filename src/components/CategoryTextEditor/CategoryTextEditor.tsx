@@ -31,7 +31,7 @@ const CategoryTextEditor: React.FC<CategoryTextEditorProps> = ({
 
   // Handle keyboard events
   const handleKeyDown = (e: React.KeyboardEvent) => {
-    const { key, shiftKey } = e;
+    const { key } = e;
     
     // Only handle events if we're not inside an input field
     if (e.target !== e.currentTarget) {
@@ -88,14 +88,14 @@ const CategoryTextEditor: React.FC<CategoryTextEditorProps> = ({
   }, [state.lines, state.activeLineIndex]);
 
   // Handle Tab key - change indentation
-  const handleTabKey = useCallback((shiftKey: boolean) => {
+  const handleTabKey = useCallback((_shiftKey: boolean) => {
     const currentLine = state.lines[state.activeLineIndex];
     if (!currentLine) return;
 
     const newLines = [...state.lines];
     let newLevel = currentLine.level;
 
-    if (shiftKey) {
+    if (_shiftKey) {
       // Shift+Tab: decrease level
       newLevel = Math.max(0, currentLine.level - 1);
     } else {
