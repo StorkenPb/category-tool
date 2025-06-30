@@ -14,6 +14,7 @@ interface TextLineProps {
   onTab?: (shiftKey: boolean) => void;
   onArrowUp?: () => void;
   onArrowDown?: () => void;
+  onBackspace?: () => void;
 }
 
 const TextLineComponent: React.FC<TextLineProps> = ({
@@ -26,6 +27,7 @@ const TextLineComponent: React.FC<TextLineProps> = ({
   onTab,
   onArrowUp,
   onArrowDown,
+  onBackspace,
 }) => {
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -41,11 +43,22 @@ const TextLineComponent: React.FC<TextLineProps> = ({
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
-    // Handle Enter key specifically
+    // Handle Enter key - only if line has text
     if (e.key === 'Enter') {
       e.preventDefault();
       e.stopPropagation();
-      onEnter?.();
+      if (line.text.trim()) {
+        onEnter?.();
+      }
+    }
+    
+    // Handle Backspace key - remove line if empty
+    if (e.key === 'Backspace') {
+      if (!line.text.trim()) {
+        e.preventDefault();
+        e.stopPropagation();
+        onBackspace?.();
+      }
     }
     
     // Handle Tab key specifically

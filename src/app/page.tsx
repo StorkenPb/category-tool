@@ -39,7 +39,7 @@ export default function Home() {
             <h2 className="text-xl font-semibold text-gray-900 mb-4">
               Debug Output
             </h2>
-            <pre className="bg-gray-100 p-4 rounded text-sm overflow-auto">
+            <pre className="bg-gray-100 p-4 rounded text-sm text-gray-900 overflow-auto">
               {JSON.stringify(lines, null, 2)}
             </pre>
           </div>

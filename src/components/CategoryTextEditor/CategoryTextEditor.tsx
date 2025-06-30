@@ -69,6 +69,24 @@ const CategoryTextEditor: React.FC<CategoryTextEditorProps> = ({
     }));
   }, [state.lines, state.activeLineIndex]);
 
+  // Handle Backspace key - remove empty line
+  const handleBackspaceKey = useCallback(() => {
+    // Don't remove the last line
+    if (state.lines.length <= 1) return;
+
+    const newLines = [...state.lines];
+    newLines.splice(state.activeLineIndex, 1);
+
+    // Adjust active line index
+    const newActiveIndex = Math.min(state.activeLineIndex, newLines.length - 1);
+
+    setState(prev => ({
+      ...prev,
+      lines: newLines,
+      activeLineIndex: newActiveIndex,
+    }));
+  }, [state.lines, state.activeLineIndex]);
+
   // Handle Tab key - change indentation
   const handleTabKey = useCallback((shiftKey: boolean) => {
     const currentLine = state.lines[state.activeLineIndex];
@@ -94,8 +112,8 @@ const CategoryTextEditor: React.FC<CategoryTextEditorProps> = ({
       }
     }
 
-    // Prevent going too deep (max 5 levels for now)
-    if (newLevel > 5) return;
+    // Prevent going too deep (max 7 levels for now)
+    if (newLevel > 7) return;
 
     newLines[state.activeLineIndex] = {
       ...currentLine,
@@ -170,14 +188,16 @@ const CategoryTextEditor: React.FC<CategoryTextEditorProps> = ({
             onTab={handleTabKey}
             onArrowUp={() => handleArrowKey('up')}
             onArrowDown={() => handleArrowKey('down')}
+            onBackspace={handleBackspaceKey}
           />
         ))}
       </div>
       
       {/* Keyboard shortcuts hint */}
-      <div className="mt-4 text-xs text-gray-500 border-t pt-2">
+      <div className="mt-4 text-xs text-gray-500 border-t border-gray-300 pt-2">
         <span className="font-medium">Keyboard shortcuts:</span>
-        <span className="ml-2">Enter = New line</span>
+        <span className="ml-2">Enter = New line (when text exists)</span>
+        <span className="ml-2">Backspace = Remove empty line</span>
         <span className="ml-2">Tab = Indent</span>
         <span className="ml-2">Shift+Tab = Outdent</span>
         <span className="ml-2">↑↓ = Navigate</span>
