@@ -183,23 +183,27 @@ const CategoryTextEditor: React.FC<CategoryTextEditorProps> = ({
       className={`category-text-editor border border-gray-300 rounded-lg p-4 bg-white ${className}`}
       onKeyDown={handleKeyDown}
     >
-      <div className="space-y-1">
-        {state.lines.map((line, index) => (
-          <TextLineComponent
-            key={line.id}
-            line={line}
-            isActive={index === state.activeLineIndex}
-            isEditing={state.isEditing && index === state.activeLineIndex}
-            onChange={(text) => handleLineChange(index, text)}
-            onFocus={() => handleLineFocus(index)}
-            onBlur={handleLineBlur}
-            onEnter={handleEnterKey}
-            onTab={handleTabKey}
-            onArrowUp={() => handleArrowKey('up')}
-            onArrowDown={() => handleArrowKey('down')}
-            onBackspace={handleBackspaceKey}
-          />
-        ))}
+      <div className="space-y-0">
+        {state.lines.map((line, index) => {
+          const childCount = state.lines.filter(l => l.parentId === line.id).length;
+          return (
+            <TextLineComponent
+              key={line.id}
+              line={line}
+              isActive={index === state.activeLineIndex}
+              isEditing={state.isEditing && index === state.activeLineIndex}
+              onChange={(text) => handleLineChange(index, text)}
+              onFocus={() => handleLineFocus(index)}
+              onBlur={handleLineBlur}
+              onEnter={handleEnterKey}
+              onTab={handleTabKey}
+              onArrowUp={() => handleArrowKey('up')}
+              onArrowDown={() => handleArrowKey('down')}
+              onBackspace={handleBackspaceKey}
+              childCount={childCount}
+            />
+          );
+        })}
       </div>
       
       {/* Keyboard shortcuts hint */}

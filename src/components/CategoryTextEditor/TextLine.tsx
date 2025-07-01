@@ -15,11 +15,13 @@ interface TextLineProps {
   onArrowUp?: () => void;
   onArrowDown?: () => void;
   onBackspace?: () => void;
+  childCount: number;
 }
 
 const TextLineComponent: React.FC<TextLineProps> = ({
   line,
   isActive,
+  isEditing,
   onChange,
   onFocus,
   onBlur,
@@ -28,6 +30,7 @@ const TextLineComponent: React.FC<TextLineProps> = ({
   onArrowUp,
   onArrowDown,
   onBackspace,
+  childCount,
 }) => {
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -83,18 +86,31 @@ const TextLineComponent: React.FC<TextLineProps> = ({
   };
 
   return (
-    <div className="flex items-center min-h-[24px] px-2">
+    <div className="flex items-center min-h-[28px] px-2 py-0 relative">
       {/* Indentation indicator */}
-      <div className="flex items-center">
+      <div className="flex items-center space-x-[22px]">
         {Array.from({ length: line.level }, (_, i) => (
           <div 
             key={i}
-            className="w-4 h-4 mr-1 flex items-center justify-center"
+            className="w-0 h-8 ml-[5px] flex items-center justify-center"
           >
-            <div className={`w-px h-5 border-l ${isActive ? 'border-slate-500' : 'border-slate-300 border-dashed'}`}></div>
+            <div className="h-full border-l border-gray-300"style={{ transform: 'translateX(-50%) translateY(-47%)'}}></div>
           </div>
         ))}
       </div>
+
+      {/* Horizontal line for non-root levels */}
+      {line.level > 0 && (
+        <div className="h-px w-6 bg-slate-300 mr-[-2px]" />
+      )}
+
+      {/* Bullet with optional downward line if has children */}
+      <span className={`mr-2 z-1 ${isActive ? 'text-blue-700' : 'text-slate-400 hover:text-slue-600'} text-base relative`}>
+        ●
+{/*         {childCount > 0 && (
+          <span className="absolute left-1/2 top-1/2 w-px h-4 bg-slate-200 z-[-1]" style={{ transform: 'translateX(-50%)', minHeight: '1rem' }} />
+        )} */}
+      </span>
 
       {/* Input field */}
       <input
@@ -109,12 +125,10 @@ const TextLineComponent: React.FC<TextLineProps> = ({
         placeholder={line.level === 0 ? "Enter root-category name..." : "Enter sub-category name..."}
       />
 
-      {/* Level indicator */}
-      {line.level > 0 && (
-        <div className="ml-2 text-xs text-gray-400">
-          L{line.level}
-        </div>
-      )}
+      {/* Child count indicator */}
+      <span className="ml-2 text-xs text-gray-500 font-mono">
+        {childCount > 0 ? childCount : "-"}
+      </span>
     </div>
   );
 };
