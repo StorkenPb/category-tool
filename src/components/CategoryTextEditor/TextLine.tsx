@@ -6,7 +6,6 @@ import { TextLine as TextLineType } from '@/types/category';
 interface TextLineProps {
   line: TextLineType;
   isActive: boolean;
-  isEditing: boolean;
   onChange: (text: string) => void;
   onFocus: () => void;
   onBlur: () => void;
@@ -21,7 +20,6 @@ interface TextLineProps {
 const TextLineComponent: React.FC<TextLineProps> = ({
   line,
   isActive,
-  isEditing,
   onChange,
   onFocus,
   onBlur,

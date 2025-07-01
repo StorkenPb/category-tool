@@ -191,7 +191,6 @@ const CategoryTextEditor: React.FC<CategoryTextEditorProps> = ({
               key={line.id}
               line={line}
               isActive={index === state.activeLineIndex}
-              isEditing={state.isEditing && index === state.activeLineIndex}
               onChange={(text) => handleLineChange(index, text)}
               onFocus={() => handleLineFocus(index)}
               onBlur={handleLineBlur}
